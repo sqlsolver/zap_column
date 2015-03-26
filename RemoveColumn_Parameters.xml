@@ -1,0 +1,11 @@
+﻿<?xml version="1.0"?>
+<params>
+	<sites>
+		<site Identity="[insert GUID of site collection]" URL="[insert URL of site collection]">
+			<column1 Name="[insert the column's internal name]" Id="[insert the first GUID associated with the column]">
+			</column1>
+			<column2 Name="[insert the column's display name]" Id="[insert the second GUID associated with the column]">
+			</column2>
+		</site>
+	</sites>
+</params>
