@@ -3,19 +3,21 @@
 Remove a column everwhere it appears in a site collection.
 
 .DESCRIPTION
-This script iterates through all webs in a site collection and removes a specified (by GUID) column wherever it is found.
+This script iterates through all webs in a site collection and removes a specified (by GUID) column wherever it is found. 
+It will create date-stamped transcript and log files in the directory it is executed from.
 
 .PARAMETER xmlfile
-Refers the path to an .XML file which contains parameters for individual sites being created.
+Refers the path to an .XML file which contains parameters for individual sites being created. Assure your parameters file
+is located in the same directory as the .ps1 file.
 
 .EXAMPLE
 From the PowerShell prompt run .\RemoveColumn.ps1 -xmlfile .\[enter the name of your parameters file].xml
 
 .NOTES
-15-02-19 Assembled by Ramona Maxwell - Internal Use Only.
+15-02-19 Assembled by Ramona Maxwell - Microsoft Public License (Ms-PL)
 
 .LINK
-[add link to IT portal]
+http://www.microsoft.com/en-us/openness/licenses.aspx
 #>
 
 Param([string]$xmlfile) 
@@ -119,8 +121,6 @@ try {
 										$list.Fields[$c].Sealed = $false
                                         $list.Update()
 										$list.Fields.Delete($list.Fields[$c].InternalName)  
-										#$list.Fields.Delete($list.Fields[$c].Id[$GUID1])
-										#$list.Fields.Delete($list.Fields[$c].Id[$GUID2])
 										}  
                                     }     
                         		}
@@ -132,7 +132,6 @@ try {
         			Write-Output “Attempting to remove field:” $columnName -ForegroundColor DarkGreen
         			$webs[$a].Fields.Delete($columnName)
     			}
-    			#$webs[$a].Dispose()
             } 
       }
 catch  [System.Management.Automation.PSArgumentException]{
@@ -153,7 +152,58 @@ finally {
 }
 }
 
-#Validate-Columns | Out-File -FilePath $validateFile -Append
-Remove-Columns | Out-File -FilePath $removeFile -Append
+function VerifyExit() {
+		$VerifyExit = read-host "Are you sure you want to exit? (y/n)"  
+        if (($VerifyExit -eq "y") -or ($VerifyExit -eq "Y")){
+		Stop-Transcript
+		Start-Sleep -Seconds 3
+		exit
+		}  
+        if (($VerifyExit -eq "n") -or ($VerifyExit -eq "N")){Menu}  
+        else {
+			write-host -foregroundcolor red "Please select y to exit or n to continue."   
+            VerifyExit  
+        }  
+} 
+
+function VerifyValidation() {
+		$VerifyValidation = read-host "This function will discover every instance of the column specified in your parameters file and record it in a text file. It may take some time to execute. Run now? (y/n)"  
+        if (($VerifyValidation -eq "y") -or ($VerifyValidation -eq "Y")){Validate-Columns | Out-File -FilePath $validateFile -Append}  
+        if (($VerifyValidation -eq "n") -or ($VerifyValidation -eq "N")){Menu}  
+        else {
+			write-host -foregroundcolor red "Please select y to configure server features or n to continue."   
+            $VerifyValidation  
+        }  
+}
+
+function VerifyRemoval() {
+		$VerifyRemoval = read-host "This script will remove the column you specify in lists and libraries throughout the farm. If you specify the wrong column name or GUID you can break your farm!! Are you sure you wish to execute this column removal function? (y/n)"  
+        if (($VerifyRemoval -eq "y") -or ($VerifyRemoval -eq "Y")){Remove-Columns | Out-File -FilePath $removeFile -Append}  
+        if (($VerifyRemoval -eq "n") -or ($VerifyRemoval -eq "N")){Menu}  
+        else {
+			write-host -foregroundcolor red "Please select y to configure server features or n to continue."   
+            $VerifyRemoval  
+        }  
+}
+
+function Menu() {
+	Write-Host "---------------------------------------------------------"   
+	Write-Host ""   
+	Write-Host "    1. Discover where column exists in farm." 
+	Write-Host "	2. Remove column throughout the farm."
+	Write-Host "    3. Exit"  
+	Write-Host ""   
+	Write-Host "---------------------------------------------------------"  
+	$answer = read-host "Please select an option."   
+	if ($answer -eq 1){VerifyValidation}  
+	if ($answer -eq 2) {VerifyRemoval}
+	if ($answer -eq 3){VerifyExit}  
+	else {
+		write-host -ForegroundColor red "Invalid Selection"  
+    	sleep 5  
+    	Menu
+	}
+}
+
 $site.dispose()
 Stop-Transcript
