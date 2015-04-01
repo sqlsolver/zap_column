@@ -3,7 +3,7 @@
 Remove a column everwhere it appears in a site collection.
 
 .DESCRIPTION
-This script iterates through all webs in a site collection and removes a specified (by GUID) column wherever it is found. 
+This script iterates through all webs in a site collection and removes a specified column wherever it is found. 
 It will create date-stamped transcript and log files in the directory it is executed from.
 
 .PARAMETER xmlfile
@@ -175,7 +175,7 @@ function VerifyValidation() {
 }
 
 function VerifyRemoval() {
-		$VerifyRemoval = read-host "This script will remove the column you specify in lists and libraries throughout the farm. If you specify the wrong column name or GUID you can break your farm!! Are you sure you wish to execute this column removal function? (y/n)"  
+		$VerifyRemoval = read-host "This script will remove the column you specify in lists and libraries throughout a given site collection. If you specify the wrong column name or GUID you can break your farm!! Are you sure you wish to execute this column removal function? (y/n)"  
         if (($VerifyRemoval -eq "y") -or ($VerifyRemoval -eq "Y")){Remove-Columns | Out-File -FilePath $removeFile -Append}  
         if (($VerifyRemoval -eq "n") -or ($VerifyRemoval -eq "N")){Menu}  
         else {
