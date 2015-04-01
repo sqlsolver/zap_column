@@ -33,10 +33,8 @@ function Get-Parameters(){
 	Loads and validates the XML file containing the script parameters.
 
 	.DESCRIPTION
-	This function will load and validate the script parameters.	
-	#>
-	  
-	# Verify the configuration file exists	
+	This function verifies the configuration file exists and is loaded. It then returns the parameters from the file at the node specified.	
+	#>	
 	if (-not(Test-Path $xmlfile)){ 
 		Write-Warning "The file containing script parameters cannot be located."
 		Write-Host "The file to create the script parameters must be located in the same directory as the calling script." -ForegroundColor:Green
@@ -47,7 +45,7 @@ function Get-Parameters(){
 	$siteParams = $scriptParams.params.sites.site
 		if($siteParams -eq $null){
 			Write-Warning "Column removal parameters are not present in the parameters file."
-			Write-Host "Ensure that the parameters file contains a <Site> node." -ForegroundColor:DarkMagenta
+			Write-Host "Ensure that the parameters file contains a <site> node." -ForegroundColor:DarkMagenta
 			return $false
 		}		
 	return $siteParams	
@@ -100,7 +98,7 @@ finally {
 	echo "Finished column audit task."
 }
 }
-#Execute Remove-Columns only if you wish to remove columns found by validation.
+
 function Remove-Columns() {
 try {
       $webCount = $webs.Count
