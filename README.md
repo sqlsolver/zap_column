@@ -6,5 +6,5 @@ The zap_column script is freely available for you to use and modify under the Mi
 <ul>
 <li>Add a site node to the .XML parameters file for each site collection you wish to perform column audit or removal operations upon. </li>
 <li>The script will create at least two files, a .log file that is transcript output and a .doc file that details the result of column operations. There is also output from the discovery function to a third .csv file (so that you can review the results in Excel) but it is created only if the column actually exists in your site. Each of the files are time-stamped when the operation begins, so it's easy to see which ones resulted from the same run of the RemoveColumn.ps1 script.</li>
-<li>For more information type 'Get-Help .\RemoveColumn.ps1' at the PowerShell prompt.</li>
+<li>For more information type <b>Get-Help .\RemoveColumn.ps1</b> at the PowerShell prompt.</li>
 </ul>
